@@ -1,6 +1,6 @@
-# D-NEXA — Base‑Ready Rewards & Merchant Settlement (USDC‑first)
+# DYNEXA — Base‑Ready Rewards & Merchant Settlement (USDC‑first)
 
-**D‑NEXA** is a USDC‑first B2B2C rewards rail on **Base**. Brands fund **USDC**, issue rewards in **DXA** (the ecosystem digital unit with 1:1 operational parity to USDC) or **GiftTokens (ERC‑1155)**, and **merchants settle in USDC** on Base. Users can keep value inside the ecosystem in DXA, or exit by converting **DXA → USDC** on‑chain.
+**DYNEXA** is a USDC‑first B2B2C rewards rail on **Base**. Brands fund **USDC**, issue rewards in **DXA** (the ecosystem digital unit with 1:1 operational parity to USDC) or **GiftTokens (ERC‑1155)**, and **merchants settle in USDC** on Base. Users can keep value inside the ecosystem in DXA, or exit by converting **DXA → USDC** on‑chain.
 
 > **Why Base?** Smart‑wallet UX via **Base Accounts / Account Kit** (gasless with Paymaster), **Basenames** for readable IDs, and a fast, low‑cost L2 with growing USDC liquidity and developer tooling.
 
