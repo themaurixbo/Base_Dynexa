@@ -167,3 +167,100 @@ MIT
 - Basename: `dynexa.base`  
 - X/Twitter: `@themaurix` (update)  
 - Email: `hi@dynexa.base` (update)
+
+- # DYNEXA — Base-Native Contract Suite (USDC-first)
+
+This README lists the **Base-ready** contracts for DYNEXA, beyond the legacy prototypes you shared. It focuses on **USDC-first** flows, **DXA (1:1 operational parity to USDC)**, **enterprise USDC settlement**, and **smart-wallet (AA)** UX.
+
+---
+
+## 1) Core contracts (Base)
+
+| Contract | Purpose | Key functions / roles |
+|---|---|---|
+| **DXA.sol (ERC20)** | Ecosystem unit with **1:1 operational parity to USDC** held in Treasury/Vault; mint/burn controlled by Treasury/Router. | `mint`, `burnFrom`, `pause`, `setRedemptionFeeBps(300)`. Roles: `TREASURY_ROLE`, `ROUTER_ROLE`, `PAUSER_ROLE`. |
+| **USDCTreasuryVault.sol** | Holds **USDC** on Base; authorizes DXA mint/burn; executes USDC payouts; houses the **3% DXA→USDC exit fee** sink/split. | `depositUSDC`, `withdrawUSDC`, `authorizeMint`, `authorizeBurn`, `setFeeSink`, `balances`. |
+| **Router.sol** | Orchestrates flows: **USDC→DXA (0%)**, **DXA→USDC (3%)**, DXA↔GiftToken settlements; enforces limits/cooldowns. | `buyDXAwithUSDC`, `redeemDXAforUSDC`, `payMerchant`, `setDailyLimits`. Role: `OPERATOR_ROLE`. |
+| **GiftToken1155.sol** | Tokenized rewards/coupons per campaign; burn-on-redeem. | `mintBatch`, `burn`, `setURI`. Roles: `ISSUER_ROLE`, `REDEEMER_ROLE`, `PAUSER_ROLE`. |
+| **CampaignRegistry.sol** | Business rules per `tokenId`: unit value (USD(6)), windows, caps, terms. | `createCampaign`, `isActive`, `update*`. Role: `ISSUER_ROLE`. |
+| **MerchantRegistry.sol** | Allowlist, merchant payout wallet, fee bps per merchant/brand. | `addMerchant`, `setPayout`, `setFeeBps`. Role: `MERCHANT_ADMIN_ROLE`. |
+| **Redeemer.sol** | **Atomic burn→pay**: validates QR/nonce, reads rules, applies fee, settles from Treasury in **USDC**. | `quoteRedeem`, `redeem`. Roles: `REDEEMER_ROLE`, `PAUSER_ROLE`. |
+| **MerchantPool.sol** (optional) | DXA sink per merchant; batches redemptions before withdrawing **USDC**. | `receiveDXA`, `withdrawUSDC`. |
+
+> Minimal Base alpha set: **DXA**, **USDCTreasuryVault**, **Router**, **GiftToken1155**, **CampaignRegistry**, **MerchantRegistry**, **Redeemer** (and optional **MerchantPool**).
+
+---
+
+## 2) Compliance & attestations
+
+| Contract / Integration | Purpose | Notes |
+|---|---|---|
+| **ComplianceGuard.sol** | On-chain allowlist/role for **DXA→USDC exits** (KYC-gated). | API/oracle toggles `isAllowed(wallet)`; Router checks before redeem. |
+| **EAS Schemas** | Attestations for missions, KYC tier, merchant reputation. | Publish schema UIDs on **Base**; store heavy data off-chain w/ content hashes. |
+| **Badges721.sol** (optional) | Achievements as ERC-721. | Mint on EAS events. |
+
+---
+
+## 3) AA / Wallet (Base Accounts / Account Kit)
+
+- **Smart wallet** with WebAuthn/social login.  
+- **Paymaster** for gas sponsorship (allowlist of contract methods).  
+- **Session keys / policy engine** (spend limits, method scopes for enterprise ops).  
+- **Basenames** for readable identities in the UI and receipts.
+
+---
+
+## 4) Events & proof-of-reserves
+
+Emit granular events so finance teams can reconcile **DXA totalSupply == USDC balance**:
+
+- `DXAMinted(to, amount, usdcRef)`  
+- `DXABurned(from, amount, fee)`  
+- `USDCDeposited(from, amount)`  
+- `USDCWithdrawn(to, amount)`  
+- `GiftRedeemed(user, tokenId, qty, merchant)`
+
+Dashboard indexes these events and raises alerts if drift > 1 wei.
+
+---
+
+## 5) Addresses (Base Sepolia — placeholders)
+
+- **DXA:** `0xDXA_ADDRESS`  
+- **USDCTreasuryVault:** `0xVAULT_ADDRESS`  
+- **Router:** `0xROUTER_ADDRESS`  
+- **GiftToken1155:** `0xGIFT1155_ADDRESS`  
+- **CampaignRegistry:** `0xCAMPAIGN_REG_ADDRESS`  
+- **MerchantRegistry:** `0xMERCHANT_REG_ADDRESS`  
+- **Redeemer:** `0xREDEEMER_ADDRESS`  
+- **MerchantPool (opt):** `0xPOOL_ADDRESS`  
+- **EAS Schema UIDs:** `0xSCHEMA_MISSION`, `0xSCHEMA_KYC`, `0xSCHEMA_MERCHANT_REP`
+
+Include BaseScan links for each.
+
+---
+
+## 6) Deploy & verify (Foundry)
+
+```bash
+export RPC_BASE_SEPOLIA="https://sepolia.base.org"
+export DEPLOYER_PK="0xYOUR_PRIVATE_KEY"
+
+forge script scripts/Deploy_Base.s.sol   --rpc-url $RPC_BASE_SEPOLIA   --private-key $DEPLOYER_PK   --broadcast
+
+# Verify
+forge verify-contract --chain base-sepolia <DXA_ADDRESS> src/DXA.sol:DXA
+forge verify-contract --chain base-sepolia <VAULT_ADDRESS> src/USDCTreasuryVault.sol:USDCTreasuryVault
+forge verify-contract --chain base-sepolia <ROUTER_ADDRESS> src/Router.sol:Router
+# ...and so on
+```
+
+---
+
+## 7) Notes
+
+- **Enterprise settlement is always in USDC** on Base; **DXA** stays as the internal spend/earn unit with **1:1 operational parity**.  
+- **USDC→DXA** fee **0%** (frictionless entry). **DXA→USDC** exit fee **3%** (configurable bps).  
+- **QR redemption** uses nonce + TTL; Redeemer burns first, then pays.  
+- **Rate limits & circuit breakers** on Router/Redeemer for risk control.
+
