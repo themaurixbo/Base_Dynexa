@@ -1,6 +1,6 @@
 # DYNEXA — Base‑Ready Rewards & Merchant Settlement (USDC‑first)
 
-**D‑NEXA** is a USDC‑first B2B2C rewards rail on **Base**. Brands fund **USDC**, issue rewards in **DXA** (the ecosystem digital unit with 1:1 operational parity to USDC) or **GiftTokens (ERC‑1155)**, and **merchants settle in USDC** on Base. Users can keep value inside the ecosystem in DXA, or exit by converting **DXA → USDC** on‑chain.
+**DYNEXA** is a USDC‑first B2B2C rewards rail on **Base**. Brands fund **USDC**, issue rewards in **DXA** (the ecosystem digital unit with 1:1 operational parity to USDC) or **GiftTokens (ERC‑1155)**, and **merchants settle in USDC** on Base. Users can keep value inside the ecosystem in DXA, or exit by converting **DXA → USDC** on‑chain.
 
 > **Why Base?** Smart‑wallet UX via **Base Accounts / Account Kit** (gasless with Paymaster), **Basenames** for readable IDs, and a fast, low‑cost L2 with growing USDC liquidity and developer tooling.
 
@@ -160,12 +160,10 @@ pnpm --filter @dynexa/api dev
 ---
 
 ## 10) License
-Choose a permissive license (e.g., MIT) or dual‑license for contracts vs apps. Update `LICENSE` accordingly.
-
----
+MIT
 
 ## 11) Maintainers / contacts
-- Team: **D‑NEXA**  
-- Basename: `yourname.base` / `dynexa.base` (update)  
-- X/Twitter: `@yourhandle` (update)  
-- Email: `team@dynexa.app` (update)
+- Team: **DYNEXA**  
+- Basename: `dynexa.base`  
+- X/Twitter: `@themaurix` (update)  
+- Email: `hi@dynexa.base` (update)
