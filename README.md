@@ -160,12 +160,12 @@ pnpm --filter @dnexa/api dev
 ---
 
 ## 10) License
-Choose a permissive license (e.g., MIT) or dual‑license for contracts vs apps. Update `LICENSE` accordingly.
+MIT
 
 ---
 
 ## 11) Maintainers / contacts
-- Team: **D‑NEXA**  
-- Basename: `yourname.base` / `dnexa.base` (update)  
-- X/Twitter: `@yourhandle` (update)  
-- Email: `team@dnexa.app` (update)
+- Team: **DYNEXA**  
+- Basename: `dynexa.base` / `dnexa.base` 
+- X/Twitter: `@ythemaurix` 
+- Email: `info@dynexa.us` (
