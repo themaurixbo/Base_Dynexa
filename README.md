@@ -236,7 +236,7 @@ Dashboard indexes these events and raises alerts if drift > 1 wei.
 - **MerchantPool (opt):** `0xPOOL_ADDRESS`  
 - **EAS Schema UIDs:** `0xSCHEMA_MISSION`, `0xSCHEMA_KYC`, `0xSCHEMA_MERCHANT_REP`
 
-Include BaseScan links for each.
+These are the new contracts we must develop together you guys BASE :)
 
 ---
 
